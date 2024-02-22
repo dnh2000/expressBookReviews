@@ -87,4 +87,87 @@ public_users.get('/review/:isbn',function (req, res) {
     }
 });
 
+//  Get book list with Promise
+
+public_users.get('/promise/',function(req,res) {
+
+    const get_books = new Promise ((resolve, reject) => {
+        resolve(res.send(JSON.stringify({books}, null, 4)));        
+    });
+    get_books.then(() => console.log("Promise resolved."));
+
+
+});
+
+// Get book details based on isbn with Promise
+public_users.get('/promise/isbn/:isbn',function(req,res) {
+
+    const get_books = new Promise ((resolve, reject) => {
+        const isbn = req.params.isbn;
+        const book = books[isbn];
+        if (book) {
+            resolve(res.send(JSON.stringify({book}, null, 4))); 
+        } else {
+          resolve(res.status(404).json({message: "Book not found."}));
+        }
+               
+    });
+    get_books.then(() => console.log("Promise resolved."));
+
+
+});
+
+// Get book details based on author with Promise
+public_users.get('/promise/author/:author',function(req,res) {
+
+    const get_books = new Promise ((resolve, reject) => {
+
+        const booksByAuthor = []
+        Object.keys(books).forEach(key => {
+          if ( books[key].author === req.params.author){
+              booksByAuthor.push(books[key]);
+          }
+          });
+          if (booksByAuthor.length === 0) {
+              resolve(res.status(404).json({message: "No books found."}));  
+          }  else {
+            resolve(res.send(JSON.stringify({booksByAuthor}, null, 4))); 
+           }      
+    });
+    get_books.then(() => console.log("Promise resolved."));
+
+
+});
+
+
+// Get book details based on title with Promise
+
+public_users.get('/promise/title/:title',function(req,res) {
+
+    const get_books = new Promise ((resolve, reject) => {
+
+
+        const booksByTitle = []
+        Object.keys(books).forEach(key => {
+          if ( books[key].title === req.params.title){
+              booksByTitle.push(books[key]);
+          }
+          });    
+          if (booksByTitle.length === 0) {
+              resolve(res.status(404).json({message: "No books found."}));  
+          }  else {
+            resolve(res.send(JSON.stringify({booksByTitle}, null, 4)));  
+           } 
+    });
+    get_books.then(() => console.log("Promise resolved."));
+
+
+});
+
+
+
+
+
+
+
 module.exports.general = public_users;
