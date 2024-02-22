@@ -3,7 +3,7 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
-
+const axios = require('axios');
 
 
 
@@ -86,6 +86,19 @@ public_users.get('/review/:isbn',function (req, res) {
       return res.status(404).json({message: "Book not found."});
     }
 });
+
+// Get book list with async-await
+
+public_users.get('/async-await/', async (req, res) => {
+    try {
+    const url = 'https://danielhildeb-5000.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/';
+    const response = await axios.get(url);
+    res.json(response.data);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 
 //  Get book list with Promise
 
